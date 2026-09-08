@@ -97,9 +97,10 @@ int main(int argc, char** argv) {
 
     std::vector<uint8_t> weights((NP_N * NP_N) / 2, 0);
     {
+        /* src=0, dst=5 → linear=5 (odd) → high nibble of byte 2 */
         uint16_t lin = static_cast<uint16_t>(0 * NP_N + 5);
         uint16_t byte_i = static_cast<uint16_t>(lin >> 1);
-        weights[byte_i] = 0x07; /* src0→dst5 weight +7 in low nibble */
+        weights[byte_i] = 0x70; /* +7 in [7:4] */
     }
     if (np_load_weights(&ctx, weights.data(), weights.size()) != 0) {
         std::printf("FAIL: np_load_weights\n");
