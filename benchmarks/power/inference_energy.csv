@@ -1,0 +1,4 @@
+metric,value,unit
+peak_power,180.0,mW
+energy_per_window,0.05,uJ
+synops_per_sec_budget,1000000,1/s

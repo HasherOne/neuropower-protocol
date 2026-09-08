@@ -1,0 +1,5 @@
+# Python deps for toolchain / examples (host)
+numpy>=1.24
+# Optional offline SNN stack:
+# torch
+# snntorch

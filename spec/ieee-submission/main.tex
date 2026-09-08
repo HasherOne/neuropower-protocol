@@ -1,0 +1,52 @@
+% NeuroPower Protocol — arXiv / IEEE draft skeleton (Task 5)
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{booktabs}
+
+\begin{document}
+
+\title{NeuroPower: An Open Layered Protocol for Event-Driven Neuromorphic Memory--Inference Co-Design on Wearables}
+
+\author{
+\IEEEauthorblockN{NeuroPower Protocol Contributors}
+\IEEEauthorblockA{Open collaboration --- see project repository}
+}
+
+\maketitle
+
+\begin{abstract}
+Proprietary neuromorphic APIs fragment the wearable AI ecosystem and make sub-watt continuous inference difficult to port. We present \emph{NeuroPower}, an open layered protocol (Physical through Application) for spike-based memory and inference, with a synthesizable RISC-V + LIF accelerator reference, offline INT4 training export, and event-driven power models targeting $<$1\,W peak, $<$100\,mW idle, and $\geq$12\,h on a 200\,mAh cell.
+\end{abstract}
+
+\begin{IEEEkeywords}
+neuromorphic computing, open hardware, wearable AI, RISC-V, spiking neural networks
+\end{IEEEkeywords}
+
+\section{Introduction}
+% Problem: Loihi / Akida / TrueNorth lock-in; wearable battery limits.
+Wearable always-on AI is constrained by energy and by incompatible neuromorphic interfaces. NeuroPower defines an interoperable stack and a free reference implementation verified in simulation (no tape-out required for protocol validation).
+
+\section{Protocol}
+\subsection{Physical and Link}
+SPI Mode~0 plus asynchronous \texttt{SPIKE\_IN}/\texttt{SPIKE\_OUT}, with a 5-byte Link packet and CRC-8~\cite{neuropower-spec}.
+
+\subsection{Network and Application}
+Up to 16 cores $\times$ 256 neurons; C API \texttt{np\_init}/\texttt{np\_load\_weights}/\texttt{np\_inference}.
+
+\section{Reference Implementation}
+Ibex/VexRiscv-class RV32I host bus, 256-LIF array with INT4 synapses, \texttt{.npw} weight streaming, and clock gating via \texttt{power\_ctrl}.
+
+\section{Evaluation}
+Offline keyword-spotting stand-in exceeds 90\% INT4 membrane accuracy on synthetic spikes; power scripts estimate $\geq$12\,h autonomy at 10\% inference duty on 200\,mAh.
+
+\section{Conclusion}
+NeuroPower offers a practical open baseline for neuromorphic wearable co-design. Community review and IEEE standardization pathways (e.g., related working groups) are future work.
+
+\begin{thebibliography}{1}
+\bibitem{neuropower-spec} NeuroPower Protocol, ``Specification v0.1,'' project repository, 2026.
+\end{thebibliography}
+
+\end{document}

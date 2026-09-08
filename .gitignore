@@ -1,0 +1,50 @@
+# Simulation / HDL
+*.vcd
+*.fst
+*.lxt
+*.lxt2
+*.log
+obj_dir/
+obj_dir_spi/
+obj_dir_soc/
+*.o
+*.a
+*.so
+*.elf
+*.bin
+*.hex
+*.mem
+
+# Build
+build/
+dist/
+out/
+*.d
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.env
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Tooling
+.cache/
+*.vvp
+*.vpi
+sim/verilator/obj_dir/
+sim/verilator/obj_dir_spi/
+sim/verilator/obj_dir_soc/
+sim/verilator/*.vcd

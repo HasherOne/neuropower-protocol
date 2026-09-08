@@ -1,0 +1,3 @@
+mode,power_mw,current_ma_at_3v3
+idle_listen,45.0,13.636
+deep_sleep,2.5,0.758

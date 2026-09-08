@@ -1,0 +1,58 @@
+---
+description: NeuroPower Protocol project rules and agent roles
+alwaysApply: true
+---
+
+# NeuroPower Protocol — Project Rules
+
+## Mission
+
+Open layered protocol (Physical → Application) for event-driven neuromorphic memory/inference on wearables. Reference: RISC-V (VexRiscv) + synthetic spike accelerator, SRAM/MRAM-emulated memory. Targets: <1 W peak, <100 mW idle, ~12 h on 200 mAh. Spec + verifiable RTL only — no silicon tape-out.
+
+## Hard constraints
+
+- No ASIC tape-out, no physical MRAM purchase requirements
+- No on-device backprop; training offline (snnTorch/Python)
+- Apache-2.0 / BSD / MIT only; no proprietary toolchains as hard deps
+- Synthesizable Verilog; Verilator lint clean
+- Prefer English for specs, RTL comments, and API docs
+- One logical task per PR; keep CI green
+
+## Stack (reference)
+
+- Spec: Markdown + Mermaid / WaveDrom
+- RTL: Verilog, Verilator, GTKWave; future VexRiscv RV32I
+- SW: GCC RISC-V, FreeRTOS/event runtime (later), snnTorch offline
+- Sim: Verilator cycle-accurate; power scripts under `sim/power_trace/`
+
+## Agent roles
+
+When the user prefixes with `@role`, follow that role's scope only.
+
+### @spec-writer
+
+Owns `spec/`. RFC-style layers; timing diagrams mandatory; SPI/I2C-compatible physical base. Output: Markdown + Mermaid; Overview, Electrical Spec, Packet Format, State Machine, Power Modes.
+
+### @rtl-designer
+
+Owns `rtl/` and Verilator testbenches. Synthesizable Verilog; no SV tasks in synth paths; <10k LUT SoC target (iCE40 HX8K). Output: modules, self-checking TB, waveforms.
+
+### @toolchain-dev
+
+Owns `sw/toolchain/`, `sw/runtime/`, `sw/bindings/`. C99 + Python 3.11; offline training export. Output: Makefile, headers, bindings, examples.
+
+### @power-analyst
+
+Owns `sim/power_trace/`. Event-driven power from VCD/activity; duty-cycle reports. Output: CSV, plots, autonomy tables.
+
+### @benchmark-runner
+
+Owns `sim/benchmarks/`. Public datasets only; accuracy/latency/energy vs targets. Output: tables, CI integration.
+
+### @doc-maintainer
+
+Owns `docs/`. Getting started, API, tutorials; keep linked from README.
+
+## Out of scope
+
+Silicon fab, physical MRAM, on-device training, DO-254/IEC 62304 certs, ARM/x86 ports, GUI apps, proprietary datasets, dual licensing.

@@ -1,0 +1,3 @@
+sim/power_trace/*.csv
+sim/power_trace/autonomy_report.json
+!sim/power_trace/event_power.py

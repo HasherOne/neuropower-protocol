@@ -1,0 +1,43 @@
+name: CI RTL
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  verilator:
+    name: Lint and test RTL
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Verilator
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y verilator g++ make python3
+
+      - name: Verilator version
+        run: verilator --version
+
+      - name: Install Python deps
+        run: pip install -r sw/requirements.txt
+
+      - name: Golden tests (Python)
+        run: make -C sim/verilator test-golden
+
+      - name: Train + INT4 export (≥90%)
+        run: make -C sim/verilator test-train
+
+      - name: Power / autonomy model
+        run: make -C sim/verilator test-power
+
+      - name: Lint SPI + SoC
+        run: make -C sim/verilator lint
+
+      - name: Test SPI stub
+        run: make -C sim/verilator test-spi
+
+      - name: Test SoC co-sim
+        run: make -C sim/verilator test-soc

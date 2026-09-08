@@ -1,0 +1,36 @@
+{
+  "capacity_mah": 200.0,
+  "targets": {
+    "peak_w": 1.0,
+    "idle_mw": 100.0,
+    "autonomy_h": 12.0
+  },
+  "scenarios": {
+    "always_on": {
+      "avg_mw": 45.675,
+      "peak_mw": 180.0,
+      "autonomy_hours": 16.2,
+      "meets_peak": true,
+      "meets_idle_budget": true
+    },
+    "duty_10pct_infer": {
+      "avg_mw": 58.5,
+      "autonomy_hours": 12.65,
+      "meets_12h": true
+    },
+    "burst": {
+      "avg_mw": 2.801,
+      "peak_mw": 180.0,
+      "autonomy_hours": 264.21,
+      "meets_peak": true,
+      "meets_idle_budget": true
+    },
+    "deep_sleep": {
+      "avg_mw": 2.5,
+      "peak_mw": 2.5,
+      "autonomy_hours": 296.0,
+      "meets_peak": true,
+      "meets_idle_budget": true
+    }
+  }
+}

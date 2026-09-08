@@ -1,0 +1,4 @@
+metric,value,unit
+synops_per_sec_budget,1000000,1/s
+n_neurons_default,256,count
+weight_bits,4,bit

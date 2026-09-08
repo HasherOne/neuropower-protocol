@@ -1,0 +1,4 @@
+metric,value,unit,notes
+spike_route_latency_budget,500,ns,Task 1 link target
+synops_per_sec_budget,1000000,1/s,Task 1 target
+inference_latency_budget,500,ms,end-to-end window
