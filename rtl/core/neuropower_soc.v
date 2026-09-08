@@ -58,8 +58,9 @@ module neuropower_soc #(
 
     wire               clk_en;
     wire               activity = busy | start_infer | ldr_busy | w_we | cpu_req | load_start;
-    // Simulation clock gate (replace with integrated clock gate cell for FPGA/ASIC)
-    wire               clk_accel = clk & clk_en;
+    // Keep accelerator on the always-on clock for correct MMIO/weight timing.
+    // power_ctrl still models clk_en / deep_sleep for power analysis (ICG for FPGA later).
+    wire               clk_accel = clk;
 
     assign accel_busy     = busy;
     assign accel_done     = done;
