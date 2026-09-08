@@ -121,20 +121,21 @@ module spi_spike_if (
                         if (bit_cnt != 6'd0)
                             pkt_crc_err <= 1'b1;
                     end else if (sclk_rise) begin
-                        frame_now = {shift_reg[38:0], mosi_sync[1]};
-                        shift_reg <= frame_now;
+                        frame_now <= {shift_reg[38:0], mosi_sync[1]};
+                        shift_reg <= {shift_reg[38:0], mosi_sync[1]};
 
                         if (bit_cnt < 6'd32)
                             crc_acc <= crc8_bit(crc_acc, mosi_sync[1]);
 
                         if (bit_cnt == 6'd39) begin
-                            if (frame_now[7:0] == crc_acc) begin
-                                neuron_id    <= frame_now[39:32];
-                                timestamp    <= frame_now[31:16];
-                                weight_delta <= frame_now[15:12];
-                                flags        <= frame_now[11:8];
+                            // Use next-frame expression (NBA to frame_now not yet visible)
+                            if ({shift_reg[38:0], mosi_sync[1]}[7:0] == crc_acc) begin
+                                neuron_id    <= {shift_reg[38:0], mosi_sync[1]}[39:32];
+                                timestamp    <= {shift_reg[38:0], mosi_sync[1]}[31:16];
+                                weight_delta <= {shift_reg[38:0], mosi_sync[1]}[15:12];
+                                flags        <= {shift_reg[38:0], mosi_sync[1]}[11:8];
                                 pkt_valid    <= 1'b1;
-                                if (!frame_now[11])
+                                if (!{shift_reg[38:0], mosi_sync[1]}[11])
                                     spike_out_cnt <= SPIKE_OUT_CLKS;
                             end else begin
                                 pkt_crc_err <= 1'b1;
