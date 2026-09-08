@@ -1,43 +1,54 @@
-name: CI RTL
+name: NeuroPower Protocol CI
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
+    branches: [main]
 
 jobs:
-  verilator:
-    name: Lint and test RTL
+  test-hardware-software:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Verilator
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install System Dependencies (Verilator)
         run: |
           sudo apt-get update
-          sudo apt-get install -y verilator g++ make python3
+          sudo apt-get install -y verilator gtkwave make gcc g++
 
-      - name: Verilator version
-        run: verilator --version
+      - name: Install Python Dependencies
+        run: |
+          pip install -r sw/requirements.txt
+          # cocotb for future Python HDL tests
+          pip install cocotb cocotb-test pytest
 
-      - name: Install Python deps
-        run: pip install -r sw/requirements.txt
+      - name: Run Golden Tests (CRC / LIF / Weight Loader)
+        run: |
+          python sim/verilator/test_crc_golden.py
+          python sim/verilator/test_lif_golden.py
+          python sim/verilator/test_weight_loader_golden.py
 
-      - name: Golden tests (Python)
-        run: make -C sim/verilator test-golden
+      - name: Run Keyword Spotting INT4 Training & Simulation
+        run: |
+          python sw/examples/keyword_spotting_train.py --np-n 16
 
-      - name: Train + INT4 export (≥90%)
-        run: make -C sim/verilator test-train
+      - name: Verify Power Model & Autonomy
+        run: |
+          python sim/power_trace/event_power.py
 
-      - name: Power / autonomy model
-        run: make -C sim/verilator test-power
-
-      - name: Lint SPI + SoC
+      - name: Lint SPI + SoC (Verilator)
         run: make -C sim/verilator lint
 
-      - name: Test SPI stub
+      - name: Test SPI stub (Verilator)
         run: make -C sim/verilator test-spi
 
-      - name: Test SoC co-sim
+      - name: Test SoC co-sim (Verilator)
         run: make -C sim/verilator test-soc
